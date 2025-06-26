@@ -1,0 +1,137 @@
+<ng-container *ngIf="showSuccessMessage">
+  <div
+    class="alert alert-success position-absolute top-1 start-50 translate-middle-x"
+    role="alert"
+  >
+    <strong>Appointment Added Successfully!</strong> Your appointment has been
+    added to the list.
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showDeletedSuccessfully">
+  <div
+    class="alert alert-success position-absolute top-1 start-50 translate-middle-x"
+    role="alert"
+  >
+    <strong>Appointment Deleted Successfully!</strong> Your appointment has been
+    deleted from the list.
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showValidationError">
+  <div
+    class="alert alert-danger position-absolute top-1 start-50 translate-middle-x"
+    role="alert"
+  >
+    <strong>Data Error!</strong> Make sure to fill in all fields before adding
+    an appointment.
+  </div>
+</ng-container>
+
+<div>
+  <h1>Appointment App</h1>
+  <div class="bg-light p-4 mb-4 rounded-3">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label for="appointmentTitle" class="form-label">
+            Appointment Title
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="appointmentTitle"
+            placeholder="Enter your appointment title.."
+            [(ngModel)]="newAppointmentTitle"
+            autofocus
+          />
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="form-group">
+          <label for="appointmentDate" class="form-label">
+            Appointment Date
+          </label>
+          <input
+            type="date"
+            class="form-control"
+            id="appointmentDate"
+            [(ngModel)]="newAppointmentDate"
+          />
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="d-flex align-items-end h-100">
+          <button
+            [disabled]="!newAppointmentDate || !newAppointmentTitle"
+            class="btn btn-primary w-100"
+            (click)="addAnAppointment()"
+          >
+            <i class="fa-solid fa-plus"></i>
+            Add Appointment
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-3 w-25" *ngIf="appointments.length">
+  <label for="searchAppointments" class="form-label">
+    Search Appointments
+  </label>
+  <input
+    type="search"
+    class="form-control"
+    id="searchAppointments"
+    placeholder="Search appointments by title..."
+    [(ngModel)]="searchTerm"
+    (input)="searchAppointments()"
+  />
+</div>
+
+<ng-container *ngIf="appointments.length > 0; else noAppointmentsTemp">
+  <ul class="list-group">
+    <li
+      *ngFor="let appointment of filteredAppointments; let i = index"
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <div class="d-flex align-items-center gap-2">
+        <span> {{ i + 1 }} - </span>
+        <span class="fw-bold">
+          {{ appointment.title }}
+        </span>
+        <small>
+          {{ appointment.date | date }}
+        </small>
+      </div>
+      <button class="btn btn-outline-danger" (click)="deleteAppointment(i)">
+        <i class="fa-solid fa-trash-can"></i>
+        Delete
+      </button>
+    </li>
+  </ul>
+</ng-container>
+<ng-template #noAppointmentsTemp>
+  <div class="card text-center">
+    <div class="card-body">
+      <h2 class="card-title">No Appointments Found</h2>
+      <p class="card-text">
+        It seems you haven't added any appointments yet. Please fill in the form
+        above to add your first appointment.
+      </p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-container *ngIf="showNoSearchFound">
+  <div class="card text-center">
+    <div class="card-body">
+      <h2 class="card-title">No Result Found</h2>
+      <p class="card-text">
+        It seems there are no appointments matching your search criteria. Please
+        try a different search term or add a new appointment.
+      </p>
+    </div>
+  </div>
+</ng-container>
